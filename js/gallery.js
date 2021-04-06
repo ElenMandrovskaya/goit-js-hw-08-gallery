@@ -25,3 +25,26 @@ import galleryItems from "./gallery-items.js"
 // Закрытие модального окна по клику на div.lightbox__overlay.
 // Закрытие модального окна по нажатию клавиши ESC.
 // Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
+
+const galleryList = document.querySelector('.js-gallery')
+// console.log(galleryList)
+
+const galleryItemMarkUp = ({ preview, original, description }) => {
+  return `
+  <li class="gallery__item">
+  <a
+    class="gallery__link"
+    href="${original}"
+  >
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>`
+}
+const string = galleryItems.map(galleryItemMarkUp).join('');
+
+galleryList.insertAdjacentHTML("beforeend", string);
