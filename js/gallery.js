@@ -2,11 +2,8 @@ import galleryItems from "./gallery-items.js"
 
 // Создай галерею с возможностью клика по ее элементам и просмотра
 // полноразмерного изображения в модальном окне.
-// Превью результата посмотри по ссылке.
 // Разбей задание на несколько подзадач:
 
-// Создание и рендер разметки по массиву данных и предоставленному шаблону.
-// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
 // Открытие модального окна по клику на элементе галереи.
 // Подмена значения атрибута src элемента img.lightbox__image.
 // Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
@@ -25,6 +22,10 @@ import galleryItems from "./gallery-items.js"
 // Закрытие модального окна по клику на div.lightbox__overlay.
 // Закрытие модального окна по нажатию клавиши ESC.
 // Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
+
+
+
+// Создание и рендер разметки по массиву данных и предоставленному шаблону.
 
 const galleryList = document.querySelector('.js-gallery')
 // console.log(galleryList)
@@ -48,3 +49,13 @@ const galleryItemMarkUp = ({ preview, original, description }) => {
 const string = galleryItems.map(galleryItemMarkUp).join('');
 
 galleryList.insertAdjacentHTML("beforeend", string);
+
+// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+
+
+galleryList.addEventListener('click', onClickImg);
+
+function onClickImg(event) {
+console.log(event)
+ }
+;
