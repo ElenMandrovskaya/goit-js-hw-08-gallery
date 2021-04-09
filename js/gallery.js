@@ -1,35 +1,12 @@
 import galleryItems from "./gallery-items.js"
 
-// Создай галерею с возможностью клика по ее элементам и просмотра
-// полноразмерного изображения в модальном окне.
-// Разбей задание на несколько подзадач:
-
-// Открытие модального окна по клику на элементе галереи.
-// Подмена значения атрибута src элемента img.lightbox__image.
-// Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
-// Очистка значения атрибута src элемента img.lightbox__image.Это необходимо для того,
-// чтобы при следующем открытии модального окна, пока грузится изображение,
-// мы не видели предыдущее.
-
-// Ссылка на оригинальное изображение должна храниться в data - атрибуте source на элементе img,
-// и указываться в href ссылки(это необходимо для доступности).
-
-
-// Дополнительно
-// Следующий функционал не обязателен при сдаче задания,
-// но будет хорошей практикой по работе с событиями.
-
-// Закрытие модального окна по клику на div.lightbox__overlay.
-// Закрытие модального окна по нажатию клавиши ESC.
-// Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
-
-
-
-// Создание и рендер разметки по массиву данных и предоставленному шаблону.
-
-const galleryList = document.querySelector('.js-gallery')
-// console.log(galleryList)
-
+const refs = {
+  galleryList: document.querySelector('.js-gallery'),
+  lightbox: document.querySelector('.js-lightbox'),
+  closeBtn: document.querySelector('button[data-action="close-lightbox"]'),
+  lightboxImg: document.querySelector('.lightbox__image'),
+  lightboxOverlay: document.querySelector('.lightbox__overlay'),
+}
 const galleryItemMarkUp = ({ preview, original, description }) => {
   return `
   <li class="gallery__item">
@@ -48,14 +25,33 @@ const galleryItemMarkUp = ({ preview, original, description }) => {
 }
 const string = galleryItems.map(galleryItemMarkUp).join('');
 
-galleryList.insertAdjacentHTML("beforeend", string);
-
-// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
-
-
-galleryList.addEventListener('click', onClickImg);
+let selectedImg = null;
 
 function onClickImg(event) {
-console.log(event)
- }
-;
+  event.preventDefault()
+   if (!event.target.classList.contains('gallery__image')) {
+    return
+  }
+  refs.lightbox.classList.add('is-open');
+  selectedImg = event.target.dataset.source;
+    // console.log(selectedImg)
+  refs.lightboxImg.src = selectedImg;
+ };
+
+function onClickCloseBtn(event) {
+  refs.lightbox.classList.remove('is-open');
+  refs.lightboxImg.src = '';
+}
+function onClickOverlay(event) {
+  refs.lightbox.classList.remove('is-open');
+  refs.lightboxImg.src = '';
+}
+function onClickEsc(event) {
+  refs.lightbox.classList.remove('is-open');
+  refs.lightboxImg.src = '';
+}
+
+refs.galleryList.insertAdjacentHTML("beforeend", string); // Рендерит разметку
+refs.galleryList.addEventListener('click', onClickImg); 
+refs.closeBtn.addEventListener('click', onClickCloseBtn);
+refs.lightboxOverlay.addEventListener('click', onClickOverlay);
