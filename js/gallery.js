@@ -7,6 +7,7 @@ const refs = {
   img: document.querySelector('.lightbox__image'),
   overlay: document.querySelector('.lightbox__overlay'),
 }
+// ========= добавляет разметку элементов в галлерее ============
 const galleryItemMarkUp = ({ preview, original, description }) => {
   return `
   <li class="gallery__item">
@@ -25,8 +26,12 @@ const galleryItemMarkUp = ({ preview, original, description }) => {
 }
 const string = galleryItems.map(galleryItemMarkUp).join('');
 
-let selectedImg = null;
+// ========= Рендерит разметку ============
+refs.galleryList.insertAdjacentHTML("beforeend", string); 
 
+
+// ========= функция для открытия модалки по клику на изображение ========
+let selectedImg = null;
 function onClickImg(event) {
   event.preventDefault()
    if (!event.target.classList.contains('gallery__image')) {
@@ -34,48 +39,71 @@ function onClickImg(event) {
   }
   refs.lightbox.classList.add('is-open');
   selectedImg = event.target.dataset.source;
-    // console.log(selectedImg)
   refs.img.src = selectedImg;
  };
 
+ // ========== функция для закрытия модалки ==========
 function closeModal(event) {
   refs.lightbox.classList.remove('is-open');
   refs.img.src = '';
- }
+  refs.img.alt = '';
+}
+ 
+// ========== функция для закрытия модалки клавишей ESC ==========
 function closeModalByEsc(event) {
   if (event.code === 'Escape') {
     closeModal();
   }
 }
 
+// ========= функция для пролистывания изображений в модалке =========
+const images = galleryItems.map((el) => el.original)
+let currentImg = 0
 function changeImage(event) {
-  const pressRight = event.code === 'ArrowRight';
-  const pressLeft = event.code === 'ArrowLeft';
-  let currentImage = refs.img.src; 
-
-  galleryItems.forEach((item, index, images) => {
-    const nextImg = images[index + 1];
-    const prevImg = images[index - 1];
-
-    if (pressRight && nextImg && refs.img.src === item.original) {
-      currentImage = nextImg.original;
+  if (event.code === 'ArrowRight') {
+    if (currentImg === images.length - 1) {
+      return
+    } else {
+      currentImg += 1;
     }
-
-    if (pressLeft && prevImg && refs.img.src === item.original) {
-      currentImage = prevImg.original;
+    refs.img.src = images[currentImg]
+    refs.img.alt = galleryItems[currentImg].description
     }
-  });
-  if (refs.img.src !== currentImage) {
-    refs.img.src = currentImage;
+  if (event.code === 'ArrowLeft') {
+    if (currentImg === 0) {
+      return
+    } else {
+      currentImg -= 1;
+    }
+    refs.img.src = images[currentImg]
+    refs.img.alt = galleryItems[currentImg].description
   }
 }
+// ========= функция для пролистывания изображений в модалке (вариант 2) =========
+// function changeImage(event) {
+//   const pressRight = event.code === 'ArrowRight';
+//   const pressLeft = event.code === 'ArrowLeft';
+//   let currentImage = refs.img.src; 
 
+//   galleryItems.forEach((el, index, images) => {
+//     const nextImg = images[index + 1];
+//     const prevImg = images[index - 1];
 
+//     if (pressRight && nextImg && refs.img.src === el.original) {
+//       currentImage = nextImg.original;
+//     }
 
+//     if (pressLeft && prevImg && refs.img.src === el.original) {
+//       currentImage = prevImg.original;
+//     }
+//   });
+//   if (refs.img.src !== currentImage) {
+//     refs.img.src = currentImage;
+//   }
+// }
 
-refs.galleryList.insertAdjacentHTML("beforeend", string); // Рендерит разметку
-refs.galleryList.addEventListener('click', onClickImg); // открывает модалку при клике на img
-refs.closeBtn.addEventListener('click', closeModal); // заккрывает модалку при клике на closeBtn
-refs.overlay.addEventListener('click', closeModal); // заккрывает модалку при клике на overlay
-  window.addEventListener('keydown', closeModalByEsc); // заккрывает модалку при нажатии на ESC
-window.addEventListener('keydown', changeImage);
+refs.galleryList.addEventListener('click', onClickImg); // добавляет слушатель на клик по изображению
+refs.closeBtn.addEventListener('click', closeModal); // добавляет слушатель на closeBtn
+refs.overlay.addEventListener('click', closeModal); // добавляет слушатель на overlay
+window.addEventListener('keydown', closeModalByEsc); // добавляет слушатель на клавишу ESC
+window.addEventListener('keydown', changeImage); // добавляет слушатель на < > 
