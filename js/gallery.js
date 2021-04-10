@@ -4,8 +4,8 @@ const refs = {
   galleryList: document.querySelector('.js-gallery'),
   lightbox: document.querySelector('.js-lightbox'),
   closeBtn: document.querySelector('button[data-action="close-lightbox"]'),
-  lightboxImg: document.querySelector('.lightbox__image'),
-  lightboxOverlay: document.querySelector('.lightbox__overlay'),
+  img: document.querySelector('.lightbox__image'),
+  overlay: document.querySelector('.lightbox__overlay'),
 }
 const galleryItemMarkUp = ({ preview, original, description }) => {
   return `
@@ -35,23 +35,28 @@ function onClickImg(event) {
   refs.lightbox.classList.add('is-open');
   selectedImg = event.target.dataset.source;
     // console.log(selectedImg)
-  refs.lightboxImg.src = selectedImg;
+  refs.img.src = selectedImg;
  };
 
-function onClickCloseBtn(event) {
+function closeModal(event) {
   refs.lightbox.classList.remove('is-open');
-  refs.lightboxImg.src = '';
-}
-function onClickOverlay(event) {
-  refs.lightbox.classList.remove('is-open');
-  refs.lightboxImg.src = '';
-}
-function onClickEsc(event) {
-  refs.lightbox.classList.remove('is-open');
-  refs.lightboxImg.src = '';
+  refs.img.src = '';
+ }
+function closeModalByEsc(event) {
+  if (event.code === 'Escape') {
+    closeModal();
+  }
 }
 
+// function changeImgByKey(event) {
+
+//   }
+
+
+
 refs.galleryList.insertAdjacentHTML("beforeend", string); // Рендерит разметку
-refs.galleryList.addEventListener('click', onClickImg); 
-refs.closeBtn.addEventListener('click', onClickCloseBtn);
-refs.lightboxOverlay.addEventListener('click', onClickOverlay);
+refs.galleryList.addEventListener('click', onClickImg); // открывает модалку при клике на img
+refs.closeBtn.addEventListener('click', closeModal); // заккрывает модалку при клике на closeBtn
+refs.overlay.addEventListener('click', closeModal); // заккрывает модалку при клике на overlay
+  window.addEventListener('keydown', closeModalByEsc); // заккрывает модалку при нажатии на ESC
+  // window.addEventListener('keydown', changeImgByKey); // перелистывание изображений клавишами 
