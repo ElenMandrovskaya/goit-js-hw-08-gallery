@@ -48,22 +48,21 @@ function closeModalByEsc(event) {
   }
 }
 
-function changeLightboxImage(event) {
+function changeImage(event) {
   const pressRight = event.code === 'ArrowRight';
   const pressLeft = event.code === 'ArrowLeft';
   let currentImage = refs.img.src; 
 
   galleryItems.forEach((item, index, images) => {
-    let indexImg = index
+    const nextImg = images[index + 1];
+    const prevImg = images[index - 1];
 
-    if (pressRight && refs.img.src === item.original) {
-      indexImg += 1
-      currentImage =  images[indexImg].original
+    if (pressRight && nextImg && refs.img.src === item.original) {
+      currentImage = nextImg.original;
     }
 
-    if (pressLeft && refs.img.src === item.original) {
-      indexImg -= 1
-      currentImage =  images[indexImg].original
+    if (pressLeft && prevImg && refs.img.src === item.original) {
+      currentImage = prevImg.original;
     }
   });
   if (refs.img.src !== currentImage) {
@@ -79,4 +78,4 @@ refs.galleryList.addEventListener('click', onClickImg); // открывает м
 refs.closeBtn.addEventListener('click', closeModal); // заккрывает модалку при клике на closeBtn
 refs.overlay.addEventListener('click', closeModal); // заккрывает модалку при клике на overlay
   window.addEventListener('keydown', closeModalByEsc); // заккрывает модалку при нажатии на ESC
-  window.addEventListener('keydown', changeLightboxImage); // перелистывание изображений клавишами 
+window.addEventListener('keydown', changeImage);
