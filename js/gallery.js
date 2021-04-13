@@ -38,8 +38,9 @@ function onClickImg(event) {
     return
   }
   refs.lightbox.classList.add('is-open');
-  selectedImg = event.target.dataset.source;
-  refs.img.src = selectedImg;
+  // selectedImg = event.target.dataset.source;
+  // refs.img.src = selectedImg;
+  refs.img.src = event.target.dataset.source;
  };
 
  // ========== функция для закрытия модалки ==========
@@ -55,31 +56,44 @@ function closeModalByEsc(event) {
     closeModal();
   }
 }
-
 // ========= функция для пролистывания изображений в модалке =========
-const images = galleryItems.map((el) => el.original)
-let currentImg = 0
-function changeImage(event) {
-  if (event.code === 'ArrowRight') {
-    if (currentImg === images.length - 1) {
-      return
-    } else {
-      currentImg += 1;
-    }
-    refs.img.src = images[currentImg]
-    refs.img.alt = galleryItems[currentImg].description
-    }
-  if (event.code === 'ArrowLeft') {
-    if (currentImg === 0) {
-      return
-    } else {
-      currentImg -= 1;
-    }
-    refs.img.src = images[currentImg]
-    refs.img.alt = galleryItems[currentImg].description
+let activeIndex = null;
+function changeImage(event)
+{
+  if (event.key === "ArrowRight" && activeIndex < galleryItems.length - 1) {
+    activeIndex += 1;
+    refs.img.src = galleryItems[activeIndex].original;
+    return;
   }
-}
+  if (event.key === "ArrowLeft" && activeIndex > 0) {
+    activeIndex -= 1;
+    refs.img.src = galleryItems[activeIndex].original;
+  }}
+
 // ========= функция для пролистывания изображений в модалке (вариант 2) =========
+// const images = galleryItems.map((el) => el.original)
+// let currentImg = 0
+// function changeImage(event) {
+//   if (event.code === 'ArrowRight') {
+//     if (currentImg === images.length - 1) {
+//       return
+//     } else {
+//       currentImg += 1;
+//     }
+//     refs.img.src = images[currentImg]
+//     refs.img.alt = galleryItems[currentImg].description
+//     }
+//   if (event.code === 'ArrowLeft') {
+//     if (currentImg === 0) {
+//       return
+//     } else {
+//       currentImg -= 1;
+//     }
+//     refs.img.src = images[currentImg]
+//     refs.img.alt = galleryItems[currentImg].description
+//   }
+// }
+// ========= функция для пролистывания изображений в модалке (вариант 3) =========
 // function changeImage(event) {
 //   const pressRight = event.code === 'ArrowRight';
 //   const pressLeft = event.code === 'ArrowLeft';
@@ -88,7 +102,6 @@ function changeImage(event) {
 //   galleryItems.forEach((el, index, images) => {
 //     const nextImg = images[index + 1];
 //     const prevImg = images[index - 1];
-
 //     if (pressRight && nextImg && refs.img.src === el.original) {
 //       currentImage = nextImg.original;
 //     }
